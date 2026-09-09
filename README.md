@@ -1,32 +1,32 @@
-# React + TypeScript + Vite
+# Chirp
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Chirp is a lightweight desktop push-to-talk radio built with Tauri, React, TypeScript and Vite.
 
-Currently, two official plugins are available:
+Phase 1 establishes the application shell, radio state model, native desktop boundary, theme engine and settings foundation. Networking and live audio are intentionally not part of this phase.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Development
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```powershell
+pnpm install
+pnpm check
+pnpm tauri dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Source layout
+
+```text
+src/
+├── app/          Application composition
+├── components/   Presentational UI grouped by feature
+├── core/         Product state and domain rules
+├── hooks/        Browser/input adapters
+├── native/       Tauri-only frontend boundary
+├── themes/       Theme definitions and token application
+└── styles/       Global visual system
+
+src-tauri/
+├── capabilities/ Tauri permission surface
+└── src/          Native window/tray lifecycle
+```
+
+See [`docs/architecture.md`](docs/architecture.md) for the boundaries that future phases should preserve.

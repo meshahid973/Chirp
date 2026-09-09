@@ -1,0 +1,236 @@
+.radio-panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 0;
+  padding: clamp(32px, 7vh, 54px) 24px 24px;
+}
+
+.frequency {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+.frequency__eyebrow {
+  margin-bottom: 8px;
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+.frequency__value {
+  color: var(--text-primary);
+  font-size: clamp(48px, 12vw, 58px);
+  font-weight: 580;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
+}
+
+.frequency__name {
+  margin-top: 10px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+
+.radio-panel__ptt {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+}
+
+.ptt-button {
+  --ptt-color: var(--radio-idle);
+  position: relative;
+  display: grid;
+  width: 184px;
+  height: 184px;
+  padding: 0;
+  place-items: center;
+  appearance: none;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ptt-button:disabled {
+  cursor: default;
+}
+
+.ptt-button[data-state='connecting'],
+.ptt-button[data-state='ptt-request'] {
+  --ptt-color: var(--radio-connecting);
+}
+
+.ptt-button[data-state='transmitting'] {
+  --ptt-color: var(--radio-transmitting);
+}
+
+.ptt-button[data-state='receiving'],
+.ptt-button[data-state='incoming'] {
+  --ptt-color: var(--radio-receiving);
+}
+
+.ptt-button__ring,
+.ptt-button__core {
+  position: absolute;
+  border-radius: 50%;
+  transition:
+    transform var(--motion-normal) cubic-bezier(.2,.8,.2,1),
+    border-color var(--motion-normal) ease,
+    background var(--motion-normal) ease,
+    box-shadow var(--motion-normal) ease,
+    opacity var(--motion-normal) ease;
+}
+
+.ptt-button__ring {
+  border: 1px solid color-mix(in srgb, var(--ptt-color) 22%, transparent);
+}
+
+.ptt-button__ring--outer {
+  inset: 0;
+  opacity: 0.42;
+}
+
+.ptt-button__ring--middle {
+  inset: 16px;
+  opacity: 0.72;
+}
+
+.ptt-button__core {
+  inset: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--ptt-color) 38%, transparent);
+  background:
+    radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--ptt-color) 10%, transparent), transparent 58%),
+    var(--bg-elevated);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.035),
+    0 16px 42px rgba(0, 0, 0, 0.32);
+}
+
+.ptt-button__signal {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--ptt-color);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--ptt-color) 50%, transparent);
+  transition:
+    width var(--motion-normal) ease,
+    height var(--motion-normal) ease,
+    box-shadow var(--motion-normal) ease;
+}
+
+.ptt-button:not(:disabled):hover .ptt-button__ring--outer {
+  transform: scale(1.025);
+  opacity: 0.62;
+}
+
+.ptt-button:not(:disabled):hover .ptt-button__core {
+  transform: scale(1.018);
+}
+
+.ptt-button[data-state='ptt-request'] .ptt-button__ring--middle {
+  animation: ptt-tune 900ms ease-in-out infinite;
+}
+
+.ptt-button[data-state='transmitting'] .ptt-button__ring--outer {
+  animation: ptt-live 1.35s ease-out infinite;
+}
+
+.ptt-button[data-state='transmitting'] .ptt-button__core {
+  transform: scale(1.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 var(--effect-glow) color-mix(in srgb, var(--radio-transmitting) 16%, transparent);
+}
+
+.ptt-button[data-state='transmitting'] .ptt-button__signal {
+  width: 14px;
+  height: 14px;
+  box-shadow: 0 0 26px color-mix(in srgb, var(--radio-transmitting) 64%, transparent);
+}
+
+.radio-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 26px;
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+}
+
+.radio-status__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--radio-idle);
+  box-shadow: 0 0 10px transparent;
+  transition:
+    background var(--motion-normal) ease,
+    box-shadow var(--motion-normal) ease;
+}
+
+.radio-status[data-state='connecting'] .radio-status__dot,
+.radio-status[data-state='ptt-request'] .radio-status__dot {
+  background: var(--radio-connecting);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--radio-connecting) 55%, transparent);
+}
+
+.radio-status[data-state='transmitting'] .radio-status__dot {
+  background: var(--radio-transmitting);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--radio-transmitting) 60%, transparent);
+}
+
+.radio-status[data-state='incoming'] .radio-status__dot,
+.radio-status[data-state='receiving'] .radio-status__dot {
+  background: var(--radio-receiving);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--radio-receiving) 60%, transparent);
+}
+
+.radio-panel__hint {
+  min-height: 16px;
+  margin: 9px 0 0;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+@keyframes ptt-tune {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes ptt-live {
+  0% { transform: scale(0.96); opacity: 0.65; }
+  70%, 100% { transform: scale(1.13); opacity: 0; }
+}
+
+@media (max-height: 590px) {
+  .radio-panel {
+    padding-top: 24px;
+  }
+
+  .radio-panel__ptt {
+    min-height: 240px;
+  }
+
+  .ptt-button {
+    width: 164px;
+    height: 164px;
+  }
+}
