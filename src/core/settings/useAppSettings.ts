@@ -4,14 +4,22 @@ import { readSettings, writeSettings } from '@/core/settings/settings.storage'
 import { applyTheme } from '@/themes/applyTheme'
 import { getTheme } from '@/themes/registry'
 
+function loadSettings(): AppSettings {
+  const stored = readSettings()
+
+  return {
+    ...stored,
+    themeId: getTheme(stored.themeId).id,
+  }
+}
+
 export function useAppSettings() {
-  const [settings, setSettings] = useState<AppSettings>(readSettings)
+  const [settings, setSettings] = useState<AppSettings>(loadSettings)
 
   useEffect(() => {
-    const normalizedTheme = getTheme(settings.themeId)
-    applyTheme(normalizedTheme)
+    applyTheme(getTheme(settings.themeId))
     document.documentElement.dataset.reducedMotion = String(settings.reducedMotion)
-    writeSettings({ ...settings, themeId: normalizedTheme.id })
+    writeSettings(settings)
   }, [settings])
 
   const setTheme = useCallback((themeId: string) => {
