@@ -8,7 +8,15 @@ interface FrequencyDisplayProps {
 
 const meterTicks = Array.from({ length: 15 }, (_, index) => index)
 
+function getConnectionLabel(session: RadioSession) {
+  if (session.status === 'offline') return 'offline'
+  if (session.status === 'connecting') return 'tuning'
+  return 'tuned'
+}
+
 export function FrequencyDisplay({ session }: FrequencyDisplayProps) {
+  const connectionLabel = getConnectionLabel(session)
+
   return (
     <motion.section
       className="frequency-card"
@@ -24,7 +32,7 @@ export function FrequencyDisplay({ session }: FrequencyDisplayProps) {
         <span className="frequency-card__eyebrow">CHIRP RADIO</span>
         <span className="frequency-card__connection" data-state={session.status}>
           <span aria-hidden="true" />
-          tuned
+          {connectionLabel}
         </span>
       </div>
 
