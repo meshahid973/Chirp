@@ -20,12 +20,19 @@ function isEditableTarget(target: EventTarget | null) {
 
 export function usePushToTalk({ enabled, onPress, onRelease }: PushToTalkOptions) {
   const pressed = useRef(false)
+  const onPressRef = useRef(onPress)
+  const onReleaseRef = useRef(onRelease)
+
+  useEffect(() => {
+    onPressRef.current = onPress
+    onReleaseRef.current = onRelease
+  }, [onPress, onRelease])
 
   useEffect(() => {
     const release = () => {
       if (!pressed.current) return
       pressed.current = false
-      onRelease()
+      onReleaseRef.current()
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -33,7 +40,7 @@ export function usePushToTalk({ enabled, onPress, onRelease }: PushToTalkOptions
 
       event.preventDefault()
       pressed.current = true
-      onPress()
+      onPressRef.current()
     }
 
     const handleKeyUp = (event: KeyboardEvent) => {
@@ -54,5 +61,5 @@ export function usePushToTalk({ enabled, onPress, onRelease }: PushToTalkOptions
       window.removeEventListener('blur', release)
       release()
     }
-  }, [enabled, onPress, onRelease])
+  }, [enabled])
 }
