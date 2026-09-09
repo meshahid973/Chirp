@@ -414,10 +414,24 @@
 
 .signal-waves span {
   width: 3px;
-  height: 5px;
+  height: 6px;
   border-radius: 99px;
   background: #09090c;
   transform-origin: center;
+}
+
+.signal-waves span:nth-child(2),
+.signal-waves span:nth-child(6) {
+  height: 9px;
+}
+
+.signal-waves span:nth-child(3),
+.signal-waves span:nth-child(5) {
+  height: 13px;
+}
+
+.signal-waves span:nth-child(4) {
+  height: 17px;
 }
 
 .signal-waves[data-state='transmitting'],
@@ -505,8 +519,8 @@
 }
 
 @keyframes signal-wave {
-  0% { height: 4px; }
-  100% { height: calc(7px + (var(--wave-index) % 4) * 2px); }
+  from { transform: scaleY(0.36); }
+  to { transform: scaleY(1.08); }
 }
 
 @media (max-height: 610px) {

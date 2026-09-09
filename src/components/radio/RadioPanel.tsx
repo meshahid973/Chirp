@@ -16,12 +16,25 @@ const statusCopy: Record<RadioStatus, { label: string; hint: string }> = {
   ready: { label: 'READY', hint: 'hold to chirp' },
   'ptt-request': { label: 'TUNING', hint: 'opening the mic' },
   transmitting: { label: 'LIVE', hint: 'release when you are done' },
-  incoming: { label: 'INCOMING', hint: `${'someone'} is tuning in` },
+  incoming: { label: 'INCOMING', hint: 'someone is tuning in' },
   receiving: { label: 'RECEIVING', hint: 'incoming chirp' },
+}
+
+function getStatusHint(session: RadioSession) {
+  if (session.status === 'incoming' && session.activePeerName) {
+    return `${session.activePeerName} is tuning in`
+  }
+
+  if (session.status === 'receiving' && session.activePeerName) {
+    return `${session.activePeerName} is chirping`
+  }
+
+  return statusCopy[session.status].hint
 }
 
 export function RadioPanel({ session, onPress, onRelease }: RadioPanelProps) {
   const copy = statusCopy[session.status]
+  const hint = getStatusHint(session)
   const shortcutCopy = session.status === 'transmitting' ? 'release to stop' : 'hold to chirp'
 
   return (
@@ -65,13 +78,13 @@ export function RadioPanel({ session, onPress, onRelease }: RadioPanelProps) {
         <AnimatePresence mode="wait" initial={false}>
           <motion.p
             className="radio-stage__hint"
-            key={copy.hint}
+            key={hint}
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 0.72, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.18 }}
           >
-            {copy.hint}
+            {hint}
           </motion.p>
         </AnimatePresence>
       </motion.section>
