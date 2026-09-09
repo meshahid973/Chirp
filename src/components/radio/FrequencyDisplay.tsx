@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react'
 import { motion } from 'motion/react'
 import type { RadioSession } from '@/core/radio/radio.types'
 
@@ -6,62 +5,22 @@ interface FrequencyDisplayProps {
   session: RadioSession
 }
 
-const meterTicks = Array.from({ length: 15 }, (_, index) => index)
-
-function getConnectionLabel(session: RadioSession) {
-  if (session.status === 'offline') return 'offline'
-  if (session.status === 'connecting') return 'tuning'
-  return 'tuned'
-}
-
 export function FrequencyDisplay({ session }: FrequencyDisplayProps) {
-  const connectionLabel = getConnectionLabel(session)
-
   return (
-    <motion.section
-      className="frequency-card"
-      data-state={session.status}
-      aria-label={`Radio ${session.frequency}, ${session.name}`}
-      initial={{ opacity: 0, y: -10, scale: 0.985 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 280, damping: 28 }}
-    >
-      <div className="frequency-card__orb" aria-hidden="true" />
-
-      <div className="frequency-card__topline">
-        <span className="frequency-card__eyebrow">CHIRP RADIO</span>
-        <span className="frequency-card__connection" data-state={session.status}>
-          <span aria-hidden="true" />
-          {connectionLabel}
-        </span>
-      </div>
-
-      <div className="frequency-card__main">
-        <span className="frequency-card__prefix">CH</span>
+    <section className="frequency-display" aria-label={`Radio ${session.frequency}, ${session.name}`}>
+      <div className="frequency-display__line">
+        <span className="frequency-display__prefix">CH</span>
         <motion.span
-          className="frequency-card__value"
+          className="frequency-display__value"
           key={session.frequency}
-          initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
+          initial={{ opacity: 0, y: 6, filter: 'blur(3px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
         >
           {session.frequency}
         </motion.span>
       </div>
-
-      <div className="frequency-card__bottom">
-        <span className="frequency-card__name">{session.name}</span>
-        <div className="frequency-card__meter" aria-hidden="true">
-          {meterTicks.map((tick) => (
-            <span
-              className="frequency-card__tick"
-              data-major={tick % 3 === 1}
-              style={{ '--tick-index': tick } as CSSProperties}
-              key={tick}
-            />
-          ))}
-        </div>
-      </div>
-    </motion.section>
+      <span className="frequency-display__name">{session.name}</span>
+    </section>
   )
 }

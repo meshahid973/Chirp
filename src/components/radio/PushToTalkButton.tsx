@@ -11,7 +11,7 @@ interface PushToTalkButtonProps {
 
 const enabledStates = new Set<RadioStatus>(['ready', 'ptt-request', 'transmitting'])
 
-const buttonCopy: Record<RadioStatus, string> = {
+const label: Record<RadioStatus, string> = {
   offline: 'OFF',
   connecting: 'WAIT',
   ready: 'HOLD',
@@ -47,22 +47,18 @@ export function PushToTalkButton({ status, onPress, onRelease }: PushToTalkButto
       disabled={!enabled}
       aria-pressed={active}
       aria-label={active ? 'Release to stop chirping' : 'Hold to chirp'}
-      whileHover={enabled ? { scale: 1.025, rotate: -0.35 } : undefined}
-      whileTap={enabled ? { scale: 0.955, rotate: 0 } : undefined}
-      transition={{ type: 'spring', stiffness: 520, damping: 28 }}
+      whileHover={enabled ? { scale: 1.025 } : undefined}
+      whileTap={enabled ? { scale: 0.95 } : undefined}
+      transition={{ type: 'spring', stiffness: 520, damping: 30 }}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerCancel={active ? onRelease : undefined}
       onContextMenu={(event) => event.preventDefault()}
     >
-      <span className="ptt-button__halo" aria-hidden="true" />
-      <span className="ptt-button__orbit ptt-button__orbit--outer" aria-hidden="true" />
-      <span className="ptt-button__orbit ptt-button__orbit--inner" aria-hidden="true" />
+      <span className="ptt-button__pulse" aria-hidden="true" />
       <span className="ptt-button__core">
-        <span className="ptt-button__icon" aria-hidden="true">
-          <Icon name="mic" size={27} />
-        </span>
-        <span className="ptt-button__label">{buttonCopy[status]}</span>
+        <Icon name="mic" size={24} />
+        <span>{label[status]}</span>
       </span>
     </motion.button>
   )
