@@ -12,6 +12,8 @@ Composes the product. It may connect feature hooks and components, but it should
 
 Presentational React components grouped by responsibility. Components receive state and callbacks through props. They do not talk directly to Supabase, LiveKit or Tauri.
 
+Radio composition is split into focused pieces such as the frequency display, push-to-talk control and signal visualizer. Animation state is derived from the same radio status rather than duplicated in local component state.
+
 ### `core/`
 
 Product state and rules. The radio reducer is the source of truth for valid radio transitions. Future realtime events should be translated into radio events instead of mutating UI state directly.
@@ -26,16 +28,24 @@ The only frontend layer allowed to call Tauri APIs directly. Window controls liv
 
 ### `themes/`
 
-Themes are semantic token sets, not alternate layouts. A future theme may change color, radius, material, motion and effects while the functional layout remains predictable.
+Themes are semantic token sets, not alternate layouts. Themes declare dark/light mode plus color, radius, motion and effect values. Components never branch on a theme id.
 
 ### `styles/`
 
-Global CSS consumes semantic variables only. Feature components should avoid hard-coded theme colors unless the color has fixed platform meaning, such as the Windows close-button danger state.
+Global CSS consumes semantic variables only. Feature components should avoid hard-coded theme colors unless a color has fixed product or platform meaning. The black push-to-talk face is intentionally a Chirp brand element shared across themes.
+
+## Motion rules
+
+- Motion handles springy interaction, layout choreography and enter/exit transitions.
+- CSS handles cheap ambient loops and state-driven decorative effects.
+- Audio visualizers must not drive React state every animation frame.
+- Transform and opacity are preferred over layout-triggering animation properties.
+- Reduced motion must preserve information and interaction while removing ambient loops.
 
 ## Phase boundaries
 
 1. Foundation and desktop shell
-2. Interaction polish and audio-reactive visuals
+2. Interaction polish and audio-reactive visual language
 3. Accounts and realtime radio state
 4. Live WebRTC push-to-talk audio
 5. Theme ecosystem, optimization and release infrastructure

@@ -1,3 +1,5 @@
+export type ThemeMode = 'dark' | 'light'
+
 export interface ThemeTokens {
   background: {
     base: string
@@ -46,5 +48,6 @@ export interface ThemeDefinition {
   id: string
   name: string
   description: string
+  mode: ThemeMode
   tokens: ThemeTokens
 }

@@ -2,7 +2,7 @@
 
 Chirp is a lightweight desktop push-to-talk radio built with Tauri, React, TypeScript and Vite.
 
-Phase 1 establishes the application shell, radio state model, native desktop boundary, theme engine and settings foundation. Networking and live audio are intentionally not part of this phase.
+The current implementation includes the native desktop shell, reducer-driven radio model, semantic theme engine and the Phase 2 interaction/visual pass. Networking and live audio intentionally remain outside the UI layer until later phases.
 
 ## Development
 
@@ -28,5 +28,7 @@ src-tauri/
 ├── capabilities/ Tauri permission surface
 └── src/          Native window/tray lifecycle
 ```
+
+Motion is used selectively for spring interactions, layout transitions and enter/exit choreography. Continuous decorative effects remain CSS-based and are disabled by the reduced-motion setting.
 
 See [`docs/architecture.md`](docs/architecture.md) for the boundaries that future phases should preserve.

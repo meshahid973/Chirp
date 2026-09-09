@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { MotionConfig } from 'motion/react'
 import { AppFooter } from '@/components/layout/AppFooter'
 import { AppShell } from '@/components/layout/AppShell'
 import { RadioPanel } from '@/components/radio/RadioPanel'
@@ -19,22 +20,24 @@ export function ChirpApp() {
   })
 
   return (
-    <AppShell radioStatus={radio.session.status}>
-      <RadioPanel
-        session={radio.session}
-        onPress={radio.startTransmission}
-        onRelease={radio.stopTransmission}
-      />
+    <MotionConfig reducedMotion={settings.settings.reducedMotion ? 'always' : 'user'}>
+      <AppShell radioStatus={radio.session.status}>
+        <RadioPanel
+          session={radio.session}
+          onPress={radio.startTransmission}
+          onRelease={radio.stopTransmission}
+        />
 
-      <AppFooter onOpenSettings={() => setSettingsOpen(true)} />
+        <AppFooter onOpenSettings={() => setSettingsOpen(true)} />
 
-      <SettingsPanel
-        open={settingsOpen}
-        settings={settings.settings}
-        onClose={() => setSettingsOpen(false)}
-        onThemeChange={settings.setTheme}
-        onReducedMotionChange={settings.setReducedMotion}
-      />
-    </AppShell>
+        <SettingsPanel
+          open={settingsOpen}
+          settings={settings.settings}
+          onClose={() => setSettingsOpen(false)}
+          onThemeChange={settings.setTheme}
+          onReducedMotionChange={settings.setReducedMotion}
+        />
+      </AppShell>
+    </MotionConfig>
   )
 }

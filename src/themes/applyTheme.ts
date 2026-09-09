@@ -32,6 +32,7 @@ export function applyTheme(theme: ThemeDefinition) {
 
   const root = document.documentElement
   root.dataset.theme = theme.id
+  root.style.colorScheme = theme.mode
 
   for (const [property, value] of Object.entries(variables)) {
     root.style.setProperty(property, value)
